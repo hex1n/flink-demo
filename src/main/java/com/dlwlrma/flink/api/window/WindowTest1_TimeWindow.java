@@ -134,11 +134,13 @@ public class WindowTest1_TimeWindow {
 
                     }
                 })
-                .allowedLateness(Time.minutes(1))
+                .allowedLateness(Time.minutes(1))// 允许1分钟的迟到数据
+                // 放入侧输出流
                 .sideOutputLateData(new OutputTag<SensorReading>("late") {
                 })
                 .sum("temperature");
 
+        // 取出侧输出流中的数据
         sumStream.getSideOutput(outputTag).print("late");
 
         resultStream.print("result1=========>");

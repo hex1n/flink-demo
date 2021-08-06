@@ -2,28 +2,22 @@ package com.dlwlrma.flink.api.demo;
 
 import com.mysql.jdbc.Driver;
 import org.apache.commons.compress.utils.Lists;
-import org.apache.flink.calcite.shaded.com.google.common.collect.Maps;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.flink.table.api.scala.map;
-import org.apache.flink.table.expressions.E;
-import org.joda.time.LocalDateTime;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author hex1n
  * @Date 2021/8/3 21:27
  * @Description
  */
-public class JdbcReader extends RichSourceFunction<List<List<String>>> {
+public class JdbcReader1 extends RichSourceFunction<List<TenantDB>> {
 
     private Connection connection = null;
     private PreparedStatement ps = null;
@@ -46,19 +40,16 @@ public class JdbcReader extends RichSourceFunction<List<List<String>>> {
     }
 
     @Override
-    public void run(SourceContext<List<List<String>>> sourceContext) throws Exception {
+    public void run(SourceContext<List<TenantDB>> sourceContext) throws Exception {
         try {
-            List<List<String>> list = Lists.newArrayList();
+            List<TenantDB> tenantDbList = Lists.newArrayList();
             while (isRunning) {
                 ResultSet resultSet = ps.executeQuery();
                 while (resultSet.next()) {
                     String s = resultSet.getString("");
                     String s1 = resultSet.getString("");
                     System.out.println("============");
-                    sourceContext.collect(list);
-                    list.clear();
-                    // 五分钟清空一下数据
-                    Thread.sleep(5000 * 60);
+                    sourceContext.collect(tenantDbList);
                 }
             }
         } catch (Exception e) {
@@ -80,10 +71,5 @@ public class JdbcReader extends RichSourceFunction<List<List<String>>> {
             e.printStackTrace();
         }
         isRunning = false;
-    }
-
-    public static void main(String[] args) {
-        int i = ChinaTimeUtils.dayDiff(System.currentTimeMillis(), new Date("2021-08-04").getTime());
-        System.out.println(i);
     }
 }

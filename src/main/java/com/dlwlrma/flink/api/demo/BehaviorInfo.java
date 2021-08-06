@@ -9,11 +9,10 @@ public class BehaviorInfo implements Serializable {
     private String agentId;
     private long time;
 
-    public BehaviorInfo(String userId, String agentId, String behavior, long time) {
+    public BehaviorInfo(String userId, String agentId, String behavior) {
         this.userId = userId;
         this.agentId = agentId;
         this.behavior = behavior;
-        this.time = time;
     }
 
     public String getId() {
@@ -54,5 +53,16 @@ public class BehaviorInfo implements Serializable {
 
     public void setAgentId(String agentId) {
         this.agentId = agentId;
+    }
+
+    @Override
+    public String toString() {
+        return "BehaviorInfo{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", behavior='" + behavior + '\'' +
+                ", agentId='" + agentId + '\'' +
+                ", time=" + time +
+                '}';
     }
 }
